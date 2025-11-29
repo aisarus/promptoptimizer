@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prompt Optimizer SaaS</title>
+    <link rel="stylesheet" href="static/css/main.css">
+    <link rel="stylesheet" href="static/css/components.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <h1>🚀 Prompt Optimizer SaaS</h1>
+                    <p class="tagline">AI-powered prompt enhancement using multi-stage optimization pipeline</p>
+                </div>
+                <div class="theme-switcher">
+                    <label class="theme-toggle">
+                        <input type="checkbox" id="themeToggle">
+                        <span class="slider">
+                            <span class="icon-sun">☀️</span>
+                            <span class="icon-moon">🌙</span>
+                        </span>
+                    </label>
+                </div>
+            </div>
+        </header>
+
+        <!-- Configuration Panel -->
+        <section class="config-panel" id="configPanel">
+            <h2>Configuration</h2>
+            <div class="config-grid">
+                <div class="config-item">
+                    <label for="backend">LLM Backend</label>
+                    <select id="backend" class="input-field">
+                        <option value="gemini">Gemini 2.5</option>
+                        <option value="grok">Grok 4</option>
+                    </select>
+                </div>
+                
+                <div class="config-item">
+                    <label for="geminiKey">Gemini API Key 🔐</label>
+                    <input type="password" id="geminiKey" class="input-field" placeholder="Enter Gemini API key">
+                    <small style="color: var(--text-secondary); display: block; margin-top: 5px;">
+                        Stored securely in your browser only
+                    </small>
+                </div>
+                
+                <div class="config-item">
+                    <label for="xaiKey">xAI API Key (Grok) 🔐</label>
+                    <input type="password" id="xaiKey" class="input-field" placeholder="Enter xAI API key">
+                    <small style="color: var(--text-secondary); display: block; margin-top: 5px;">
+                        Stored securely in your browser only
+                    </small>
+                </div>
+                
+                <div class="config-item">
+                    <button id="clearKeysBtn" class="btn-danger" style="margin-top: 20px;">
+                        🗑️ Clear Saved Keys
+                    </button>
+                </div>
+                
+                <div class="config-item">
+                    <label for="maxIterations">Max D/S Iterations</label>
+                    <input type="number" id="maxIterations" class="input-field" value="3" min="1" max="6">
+                </div>
+                
+                <div class="config-item">
+                    <label for="convergenceThreshold">Convergence Threshold</label>
+                    <input type="number" id="convergenceThreshold" class="input-field" value="0.05" min="0.01" max="0.20" step="0.01">
+                </div>
+                
+                <div class="config-item checkbox-item">
+                    <label>
+                        <input type="checkbox" id="forceOptimization" checked>
+                        Force optimization even if Smart Queue says no
+                    </label>
+                </div>
+            </div>
+        </section>
+
+        <!-- Input Section -->
+        <section class="input-section">
+            <h2>Input Prompt</h2>
+            <textarea id="inputPrompt" class="prompt-input" placeholder="Enter your prompt here to optimize...">I want to create a simple API documentation, but I'm not sure how to structure it...</textarea>
+            <button id="optimizeBtn" class="btn-primary">🎯 Optimize Prompt</button>
+        </section>
+
+        <!-- Loading Indicator -->
+        <div id="loadingIndicator" class="loading-indicator" style="display: none;">
+            <div class="spinner"></div>
+            <p id="loadingMessage">Processing your prompt through the optimization pipeline...</p>
+            <div id="progressContainer" style="margin-top: 20px;">
+                <div class="progress-bar-full">
+                    <div id="progressBar" class="progress-bar-fill" style="width: 0%"></div>
+                </div>
+                <div id="progressText" style="text-align: center; margin-top: 10px; color: var(--text-secondary);"></div>
+            </div>
+        </div>
+
+        <!-- Real-time Progress Display -->
+        <section id="realtimeProgress" class="realtime-progress" style="display: none;">
+            <h2>🔄 Optimization Progress</h2>
+            <div id="stagesList" class="stages-list"></div>
+        </section>
+
+        <!-- Results Section -->
+        <section id="resultsSection" class="results-section" style="display: none;">
+            <!-- Smart Queue Results -->
+            <div class="result-block">
+                <h2>📊 Smart Queue Analysis</h2>
+                <div id="smartQueueResults"></div>
+            </div>
+
+            <!-- PCV Results -->
+            <div class="result-block">
+                <h2>🔄 Proposer-Critic-Verifier (PCV)</h2>
+                <div id="pcvResults"></div>
+            </div>
+
+            <!-- D/S Iterations -->
+            <div class="result-block">
+                <h2>🔁 D/S Cycle (Diversification/Stabilization)</h2>
+                <div id="dsResults"></div>
+            </div>
+
+            <!-- Final Prompt -->
+            <div class="result-block highlight">
+                <h2>✨ Final Optimized Prompt</h2>
+                <div id="finalPrompt"></div>
+                <button id="copyFinalBtn" class="btn-secondary">📋 Copy to Clipboard</button>
+            </div>
+
+            <!-- Evaluation -->
+            <div class="result-block">
+                <h2>📈 Quality Evaluation</h2>
+                <div id="evaluationResults"></div>
+            </div>
+
+            <!-- Metrics -->
+            <div class="result-block">
+                <h2>📏 Metrics</h2>
+                <div id="metricsResults"></div>
+            </div>
+        </section>
+
+        <!-- Error Display -->
+        <div id="errorDisplay" class="error-display" style="display: none;"></div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Powered by FastAPI + AI | <a href="http://localhost:8000/docs" target="_blank">API Docs</a></p>
+        </footer>
+    </div>
+
+    <!-- Load Components -->
+    <script src="components/smart-queue.js"></script>
+    <script src="components/pcv-display.js"></script>
+    <script src="components/ds-display.js"></script>
+    <script src="components/evaluation-display.js"></script>
+    <script src="components/metrics-display.js"></script>
+    
+    <!-- Main App -->
+    <script src="static/js/api-client.js"></script>
+    <script src="static/js/app.js"></script>
+</body>
+</html>
